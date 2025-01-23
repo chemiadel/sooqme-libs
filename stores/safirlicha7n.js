@@ -1,43 +1,38 @@
 document.addEventListener('DOMContentLoaded', function () {
-    function handleWhatsapp() {
-        const whatsappBtn = document.getElementById('whatsapp-product-button');
-        const buyButton = document.getElementById('buyButton'); // Reference to the buyButton
 
-        // Remove the buyButton from the DOM
-        if (buyButton) {
-            buyButton.remove();
+    function handleWhatsapp() {
+    const whatsappBtn = document.getElementById('whatsapp-product-button');
+
+    // Remove the href attribute
+    whatsappBtn.removeAttribute('href');
+
+    // Add an onclick event listener
+    whatsappBtn.onclick = function () {
+        const phoneNumber = "+213"+context.data[0].data.storeByIdPublic.storeProfile.whatsup; // Replace with your WhatsApp number
+        const name = document.getElementById('firstname').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const customMessage = document.getElementById('custom_message').value.trim();
+
+        // Validation: Check if name or phone is missing
+        if (!name || !phone) {
+            alert("يرجى ملء الاسم ورقم الهاتف."); // "Please fill in the name and phone number."
+            return;
         }
 
-        // Remove the href attribute from the WhatsApp button
-        whatsappBtn.removeAttribute('href');
+        // Construct the message with proper line breaks
+        const message = encodeURIComponent(
+            `Name: ${name}\nPhone: ${phone}\n\nMessage:\n${customMessage}`
+        );
 
-        // Add an onclick event listener
-        whatsappBtn.onclick = function () {
-            const phoneNumber = "1234567890"; // Replace with your WhatsApp number
-            const name = document.getElementById('firstname').value.trim();
-            const phone = document.getElementById('phone').value.trim();
-            const customMessage = document.getElementById('custom_message')?.value.trim();
-            const productName = window.context.data[1].data.productBySlugPublic.name; // Get the product name
+        // WhatsApp URL
+        const whatsappURL = `https://wa.me/${phoneNumber}?text=${message}`;
 
-            // Validation: Check if name or phone is missing
-            if (!name || !phone) {
-                alert("يرجى ملء الاسم ورقم الهاتف."); // "Please fill in the name and phone number."
-                return;
-            }
+        // Redirect to WhatsApp
+        window.location.href = whatsappURL;
+    };
+}
 
-            // Construct the message with proper line breaks
-            const message = encodeURIComponent(
-                `Product: ${productName}\nName: ${name}\nPhone: ${phone}\n\nMessage:\n${customMessage || ""}`
-            );
+// Call the function to apply the changes
+handleWhatsapp();
 
-            // WhatsApp URL
-            const whatsappURL = `https://wa.me/${phoneNumber}?text=${message}`;
-
-            // Redirect to WhatsApp
-            window.location.href = whatsappURL;
-        };
-    }
-
-    // Call the function to apply the changes
-    handleWhatsapp();
 });
